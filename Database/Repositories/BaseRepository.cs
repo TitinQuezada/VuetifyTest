@@ -81,5 +81,19 @@ namespace Database.Repositories
         {
             await _applicationContext.SaveChangesAsync();
         }
+
+        async Task<int> IBaseRepository<T>.CountAsync()
+        {
+            IQueryable<T> queryable = _set.AsQueryable();
+
+            return await queryable.CountAsync();
+        }
+
+        async Task<int> IBaseRepository<T>.CountAsync(Expression<Func<T, bool>> condition)
+        {
+            IQueryable<T> queryable = _set.AsQueryable();
+
+            return await queryable.CountAsync(condition);
+        }
     }
 }

@@ -110,6 +110,7 @@ namespace VuetifyTest
         {
             services.AddScoped<AuthenticationManager, AuthenticationManager>();
             services.AddScoped<SystemUserManager, SystemUserManager>();
+            services.AddScoped<DashBoardManager, DashBoardManager>();
         }
 
         private void BuildMapsToScope(IServiceCollection services)
@@ -167,7 +168,7 @@ namespace VuetifyTest
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8081/");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080/");
                 }
             });
         }

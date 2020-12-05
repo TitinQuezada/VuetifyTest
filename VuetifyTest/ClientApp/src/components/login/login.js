@@ -22,7 +22,10 @@ export default {
         const { data } = await AuthenticateService.authenticate(
           authenticateModel
         );
+
         localStorage.setItem('currentUser', JSON.stringify(data));
+
+        this.$router.push('home');
       }
     },
   },

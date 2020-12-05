@@ -1,7 +1,12 @@
 <template>
   <v-container fill-height>
     <v-row justify="center">
-      <v-form ref="form" lazy-validation class="text-center form pa-3">
+      <v-form
+        @submit.prevent="login"
+        ref="form"
+        lazy-validation
+        class="text-center form pa-3"
+      >
         <v-row>
           <v-col>
             <img
@@ -39,7 +44,7 @@
 
         <v-row>
           <v-col cols="12">
-            <v-btn block color="success" @click="login">
+            <v-btn type="submit" block color="success">
               Iniciar sessión
             </v-btn>
           </v-col>

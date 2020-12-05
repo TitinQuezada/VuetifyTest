@@ -1,5 +1,6 @@
 import axios from 'axios';
 import currentUserService from './services/authenticate-service';
+import router from './router/Router';
 
 const httpClient = axios.create({
   baseURL: 'https://localhost:44336/',
@@ -20,6 +21,23 @@ httpClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
+  }
+);
+
+httpClient.interceptors.response.use(
+  (response) => {
+    if (response.status === 200 || response.status === 201) {
+      return Promise.resolve(response);
+    } else {
+      return Promise.reject(response);
+    }
+  },
+  ({ response }) => {
+    if (response.status === 401) {
+      router.replace('/');
+    }
+
+    return Promise.reject(response);
   }
 );
 

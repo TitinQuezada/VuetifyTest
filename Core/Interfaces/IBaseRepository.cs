@@ -21,5 +21,9 @@ namespace Core.Interfaces
         Task<bool> ExistAsync(Expression<Func<T, bool>> condition);
 
         Task SaveAsync();
+
+        Task<int> CountAsync();
+
+        Task<int> CountAsync(Expression<Func<T, bool>> condition);
     }
 }
