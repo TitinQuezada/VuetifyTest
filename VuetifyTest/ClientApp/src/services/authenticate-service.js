@@ -6,7 +6,8 @@ class AuthenticateService {
   }
 
   get currentUser() {
-    return JSON.parse(localStorage.getItem('currentUser'));
+    const currentUser = localStorage.getItem('currentUser');
+    return JSON.parse(currentUser);
   }
 }
 
