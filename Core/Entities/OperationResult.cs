@@ -19,6 +19,8 @@ namespace Core.Entities
 
         public static OperationResult<T> Ok(T entity) => new OperationResult<T>(string.Empty, entity, true);
 
-        public static OperationResult<T> Fail(string message) => new OperationResult<T>(message, default(T), false);
+        public static OperationResult<T> Ok() => new OperationResult<T>(string.Empty, default, true);
+
+        public static OperationResult<T> Fail(string message) => new OperationResult<T>(message, default, false);
     }
 }

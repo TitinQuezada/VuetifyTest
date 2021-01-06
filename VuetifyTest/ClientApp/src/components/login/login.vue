@@ -44,9 +44,7 @@
 
         <v-row>
           <v-col cols="12">
-            <v-btn type="submit" block color="success">
-              Iniciar sessión
-            </v-btn>
+            <v-btn type="submit" block color="success"> Iniciar sessión </v-btn>
           </v-col>
 
           <v-col cols="12">

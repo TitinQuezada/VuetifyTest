@@ -32,5 +32,19 @@ namespace VuetifyTest.Controllers
 
             return Ok();
         }
+
+        [AllowAnonymous]
+        [HttpGet("activate-account")]
+        public async Task<IActionResult> Activate([FromQuery(Name = "email")] string email, [FromQuery(Name = "encriptedUsername")] string encriptedUsername)
+        {
+            IOperationResult<bool> createResult = await _systemUserManager.Activate(email, encriptedUsername);
+
+            if (!createResult.Success)
+            {
+                return BadRequest(createResult.Message);
+            }
+
+            return Redirect("https://localhost:44336/");
+        }
     }
 }

@@ -1,10 +1,12 @@
 using Authenticator;
 using AutoMapper;
 using Core.Interfaces;
+using Core.Interfaces.Email;
 using Core.Managers;
 using Core.Maps;
 using Database;
 using Database.Repositories;
+using Email;
 using Encryptor;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -94,11 +96,33 @@ namespace VuetifyTest
 
         private void BuildServicesToScope(IServiceCollection services)
         {
+            UserService userServiceResult = BuildUserService();
+            EmailService emailServiceResult = BuildEmailService();
+
+            services.AddScoped<IUserService>(userService => userServiceResult);
+            services.AddScoped<IEncrypService, EncrypService>();
+            services.AddScoped<IEmailService>(emailService => emailServiceResult);
+        }
+
+        private UserService BuildUserService()
+        {
             string secretKey = Configuration["Jwt:secretKey"];
             string issuer = Configuration["Jwt:issuer"];
+            
 
-            services.AddScoped<IUserService>(userService => new UserService(secretKey, issuer));
-            services.AddScoped<IEncrypService, EncrypService>();
+            return new UserService(secretKey, issuer);
+        }
+
+        private EmailService BuildEmailService()
+        {
+            string apiKey = Configuration["SendGrid:ApiKey"];
+            string mailSender = Configuration["SendGrid:MailSender"];
+            string mailerName = Configuration["SendGrid:MailerName"];
+            string activationMailSubject = Configuration["SendGrid:ActivationMailSubject"];
+            string baseUrl = Configuration["Application:BaseUrl"];
+            string activateSystemUserRoute = Configuration["Application:ActivateAccountRoute"];
+
+            return new EmailService(apiKey, mailSender, mailerName, activationMailSubject , baseUrl , activateSystemUserRoute);
         }
 
         private void BuildRepositoriesToScope(IServiceCollection services)

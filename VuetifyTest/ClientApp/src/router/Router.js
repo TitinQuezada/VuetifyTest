@@ -13,41 +13,41 @@ const routes = [
     name: 'Home',
     component: Login,
     meta: {
-      allowAnonymous: true,
-    },
+      allowAnonymous: true
+    }
   },
   {
     path: '/register',
     name: 'Register',
     component: Register,
     meta: {
-      allowAnonymous: true,
-    },
+      allowAnonymous: true
+    }
   },
   {
     path: '/home',
     name: 'Home',
     component: HomePage,
     meta: {
-      allowAnonymous: false,
-    },
-  },
+      allowAnonymous: false
+    }
+  }
 ];
 
 const router = new VueRouter({
-  routes,
+  routes
 });
 
 router.beforeEach((to, from, next) => {
   if (!to.meta.allowAnonymous && !AuthenticateService.currentUser) {
     next({
       path: '/',
-      query: { redirect: to.fullPath },
+      query: { redirect: to.fullPath }
     });
   } else if (to.meta.allowAnonymous && AuthenticateService.currentUser) {
     next({
       path: 'home',
-      query: { redirect: to.fullPath },
+      query: { redirect: to.fullPath }
     });
   } else {
     next();

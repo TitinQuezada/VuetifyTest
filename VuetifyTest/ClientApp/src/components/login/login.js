@@ -4,7 +4,7 @@ export default {
   data() {
     return {
       username: '',
-      password: '',
+      password: ''
     };
   },
 
@@ -13,28 +13,32 @@ export default {
       return this.$refs.form.validate();
     },
     async login() {
-      if (this.validateForm()) {
-        const authenticateModel = {
-          username: this.username,
-          password: this.password,
-        };
+      try {
+        if (this.validateForm()) {
+          const authenticateModel = {
+            username: this.username,
+            password: this.password
+          };
 
-        const { data } = await AuthenticateService.authenticate(
-          authenticateModel
-        );
+          const { data } = await AuthenticateService.authenticate(
+            authenticateModel
+          );
 
-        localStorage.setItem('currentUser', JSON.stringify(data));
+          localStorage.setItem('currentUser', JSON.stringify(data));
 
-        this.$router.push('home');
+          this.$router.push('home');
+        }
+      } catch ({ data }) {
+        this.$toastr.error(data, 'Ha ocurrido un error inesperado');
       }
-    },
+    }
   },
   computed: {
     userRules() {
-      return [(value) => !!value || 'El usuario es requerido'];
+      return [value => !!value || 'El usuario es requerido'];
     },
     passwordRules() {
-      return [(value) => !!value || 'La contraseña es requerida'];
-    },
-  },
+      return [value => !!value || 'La contraseña es requerida'];
+    }
+  }
 };

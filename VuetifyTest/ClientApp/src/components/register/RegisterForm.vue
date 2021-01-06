@@ -76,9 +76,7 @@
 
         <v-row>
           <v-col cols="12">
-            <v-btn block color="success" @click="register">
-              Registrarse
-            </v-btn>
+            <v-btn block color="success" @click="register"> Registrarse </v-btn>
           </v-col>
 
           <v-col cols="12">

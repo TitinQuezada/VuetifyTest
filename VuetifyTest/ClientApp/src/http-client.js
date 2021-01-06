@@ -5,12 +5,12 @@ import router from './router/Router';
 const httpClient = axios.create({
   baseURL: 'https://localhost:44336/',
   headers: {
-    'Content-type': 'application/json',
-  },
+    'Content-type': 'application/json'
+  }
 });
 
 httpClient.interceptors.request.use(
-  (configuration) => {
+  configuration => {
     const user = currentUserService.currentUser;
 
     if (user) {
@@ -19,13 +19,13 @@ httpClient.interceptors.request.use(
 
     return configuration;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   }
 );
 
 httpClient.interceptors.response.use(
-  (response) => {
+  response => {
     if (response.status === 200 || response.status === 201) {
       return Promise.resolve(response);
     } else {

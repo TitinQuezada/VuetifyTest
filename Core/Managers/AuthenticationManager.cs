@@ -22,12 +22,21 @@ namespace Core.Managers
         {
             try
             {
+                IOperationResult<string> validationLoginModelResult = ValidateLoginModel(authenticationRequest);
+
+                if (!validationLoginModelResult.Success)
+                {
+                    return OperationResult<AuthenticationViewModel>.Fail(validationLoginModelResult.Message);
+                }
+
                 string encrypPassword = _encrypService.EncrypText(authenticationRequest.Password);
                 SystemUser user = await _systemUserRepository.FindAsync(user => user.Username == authenticationRequest.Username && user.Password == encrypPassword);
 
-                if (user == null)
+                IOperationResult<string> validationUserResult = ValidateULogedUser(user);
+
+                if (!validationUserResult.Success)
                 {
-                    return OperationResult<AuthenticationViewModel>.Fail("Usuario o contraseña incorrecto");
+                    return OperationResult<AuthenticationViewModel>.Fail(validationUserResult.Message);
                 }
 
                 AuthenticationViewModel authenticationResponse = _userService.GetToken(user);
@@ -38,6 +47,41 @@ namespace Core.Managers
             {
                 return OperationResult<AuthenticationViewModel>.Fail("Ha ocurrido un error en la autenticación del usuario");
             }
+        }
+
+        private IOperationResult<string> ValidateLoginModel(AuthenticationRequest authenticationRequest)
+        {
+            if (authenticationRequest == null)
+            {
+                return OperationResult<string>.Fail("La autenticacion no puede estar nula");
+            }
+
+            if (string.IsNullOrWhiteSpace(authenticationRequest.Username))
+            {
+                return OperationResult<string>.Fail("El nombre de usuario es requerido");
+            }
+
+            if (string.IsNullOrWhiteSpace(authenticationRequest.Password))
+            {
+                return OperationResult<string>.Fail("La contraseña del usuario es requerida");
+            }
+
+            return OperationResult<string>.Ok();
+        }
+
+        private IOperationResult<string> ValidateULogedUser(SystemUser user)
+        {
+            if (user == null)
+            {
+                return OperationResult<string>.Fail("Usuario o contraseña incorrecto");
+            }
+
+            if (!user.Active)
+            {
+                return OperationResult<string>.Fail("Este usuario no se encuentra activo");
+            }
+
+            return OperationResult<string>.Ok();
         }
     }
 }
